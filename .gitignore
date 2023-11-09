@@ -11,7 +11,8 @@
 .mtj.tmp/
 
 # Package Files #
-*.jar
+# Comentando para poder facilicar a reutilização do projeto para iniciantes
+# *.jar
 *.war
 *.nar
 *.ear
