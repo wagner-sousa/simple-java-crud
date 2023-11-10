@@ -45,7 +45,7 @@ public abstract class DataAccessObject<Model extends IModel> {
         String fieldNames = String.join(", ", params);
         String valuePlaceholders = "?,".repeat(params.size() - 1) + "?";
 
-        String sql = "INSERT INTO " + DatabaseConnection.getPrefix() + getTable() +
+        String sql = "INSERT INTO " + DatabaseConnection.mountTableName(getTable()) +
                 "(" + fieldNames + ") " +
                 "VALUES (" + valuePlaceholders + ")";
 
@@ -64,7 +64,7 @@ public abstract class DataAccessObject<Model extends IModel> {
                 .reduce((a, b) -> a + ", " + b)
                 .orElse("");
 
-        String sql = "UPDATE " + DatabaseConnection.getPrefix() + getTable() +
+        String sql = "UPDATE " + DatabaseConnection.mountTableName(getTable()) +
                 " SET " + setClause +
                 " WHERE " + this.getPrimaryKey() + " = ?";
 
@@ -80,7 +80,7 @@ public abstract class DataAccessObject<Model extends IModel> {
     public void destroy() {
 
         String sql = "DELETE FROM " + 
-                        DatabaseConnection.getPrefix() + getTable() +
+                        DatabaseConnection.mountTableName(getTable()) +
                         " WHERE " + this.getPrimaryKey() + " = ? LIMIT 1";
 
         ArrayList<String> params = new ArrayList<>();
@@ -181,7 +181,7 @@ public abstract class DataAccessObject<Model extends IModel> {
 
  
     public ArrayList<Model> list() {
-        String sql = "SELECT * FROM " + DatabaseConnection.getPrefix() + getTable();
+        String sql = "SELECT * FROM " + DatabaseConnection.mountTableName(getTable());
     
         try (ResultSet rs = this.executeQuery(sql)) {
     
@@ -200,7 +200,7 @@ public abstract class DataAccessObject<Model extends IModel> {
 
     public Model getById(int id) {
         String sql = "SELECT * FROM " + 
-                        DatabaseConnection.getPrefix() + getTable() + 
+                        DatabaseConnection.mountTableName(getTable()) + 
                         " WHERE " + this.getPrimaryKey() + " =  " + id +
                         " LIMIT 1";        
 

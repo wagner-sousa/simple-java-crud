@@ -7,14 +7,11 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         clearScreen();
-
-
         
         Boolean logon = true;
         while (logon) {
             clearScreen();
 
-            System.out.println(System.getProperty("database.name"));
             System.out.println("OPCÕES");
             
             System.out.println();

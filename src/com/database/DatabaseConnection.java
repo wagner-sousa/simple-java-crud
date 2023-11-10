@@ -5,22 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.exceptions.ConnectionException;
+import com.properties.ApplicationProperties;
 
 public class DatabaseConnection {
-    public static final String DATABASE_NAME = "sesisenai";
-    public static final String DATABASE_USER = "sesisenai";
-    public static final String DATABASE_PASSWORD = "V0BnbmVyMTIz";
-    public static final String DATABASE_HOST = "www.db4free.net";
-    public static final String DATABASE_PORT = "3306";
-    public static final String DATABASE_URL = "jdbc:mysql://";
-
-    public static final String DATABASE_PREFIX = "sa_";
 
     public static String error = "";
-
-    public String getDatabaseName() {
-        return System.getProperty("database.name");
-    }
 
     /**
      * Opens a connection to the database.
@@ -29,7 +18,7 @@ public class DatabaseConnection {
      */
     public static Connection open() throws ConnectionException {
         try {
-            return DriverManager.getConnection(getUrlConnection(), DATABASE_USER, DATABASE_PASSWORD);
+            return DriverManager.getConnection(getUrlConnection(), getDatabaseUser(), getDatabasePassword());
         } catch (SQLException e) {
             error = e.getMessage();
             throw new ConnectionException("\nErro ao realizar conexão com o banco de dados");
@@ -46,8 +35,8 @@ public class DatabaseConnection {
         if (debug) {
             System.out.println("MODO DEBUG ATIVADO");
             System.out.println("- CONEXÃO UTILIZADA: " + getUrlConnection());
-            System.out.println("- USUÁRIO: " + DATABASE_USER);
-            System.out.println("- SENHA: " + DATABASE_PASSWORD);
+            System.out.println("- USUÁRIO: " + getDatabaseUser());
+            System.out.println("- SENHA: " + getDatabasePassword());
 
             System.out.println("\n\nConectando ao banco de dados...");
         }
@@ -69,22 +58,45 @@ public class DatabaseConnection {
         return connection;
     }
 
+    public static String getDatabaseName() {
+        return ApplicationProperties.getProp("database.name");
+    }
+
+    private static String getDatabaseUser() {
+        return ApplicationProperties.getProp("database.user");
+    }
+
+    private static String getDatabasePassword() {
+        return ApplicationProperties.getProp("database.password");
+    }
+
+    public static String getDatabasePrefix() {
+        return ApplicationProperties.getProp("database.prefix");
+    }
+
+    private static String getDatabaseHost() {
+        return ApplicationProperties.getProp("database.host");
+    }
+
+    private static String getDatabasePort() {
+        return ApplicationProperties.getProp("database.port");
+    }
+
+    private static String getDatabaseConnection() {
+        return ApplicationProperties.getProp("database.connection");
+    }
+
+
     /**
      * Returns the URL connection string for the database.
      *
      * @return the URL connection string for the database
      */
     public static String getUrlConnection() {
-        return DATABASE_URL + DATABASE_HOST + ":" + DATABASE_PORT + "/" + DATABASE_NAME;
+        return getDatabaseConnection() + "://" + getDatabaseHost() + ":" + getDatabasePort() + "/" + getDatabaseName();
     }
 
-    /**
-     * Retrieves the prefix used for the database.
-     *
-     * @return The prefix used for the database.
-     */
-    public static String getPrefix() {
-        return DATABASE_PREFIX;
+    public static String mountTableName(String table) {
+        return getDatabasePrefix() + table;
     }
-
 }
