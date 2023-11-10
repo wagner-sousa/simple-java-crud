@@ -3,14 +3,16 @@ import java.util.ArrayList;
 import com.database.DatabaseConnection;
 import com.model.Aluno;
 
+import console.Util;
+
 public class App {
 
     public static void main(String[] args) throws Exception {
-        clearScreen();
+        Util.clear();
         
         Boolean logon = true;
         while (logon) {
-            clearScreen();
+            Util.clear();
 
             System.out.println("OPCÕES");
             
@@ -32,7 +34,7 @@ public class App {
 
             String opcao = System.console().readLine();
 
-            clearScreen();
+            Util.clear();
             
             switch (opcao.toUpperCase()) {
                 case "A":
@@ -100,10 +102,6 @@ public class App {
         
     }
 
-    public static void clearScreen() {
-        System.out.print("\033[H\033[2J");
-    }
-
     public static void connectionTest() {
         try {
             DatabaseConnection.open(true);
@@ -117,7 +115,7 @@ public class App {
 
         alunos = Aluno.list();
 
-        clearScreen();
+        Util.clear();
 
         for (Aluno aluno : alunos) {
             System.out.println("[" + aluno.getId() + "] - " + aluno.toString());
